@@ -741,9 +741,9 @@ body {background:#0b1c25; font-family:"Apple SD Gothic Neo","Noto Sans CJK KR","
           <div><span>분해능 규모*</span><strong id="resolutionLabel">—</strong></div>
         </div>
         <div id="arrayResBox" class="array-res-box" aria-label="배열 너비와 분해능 비교">
-          <div class="array-res-head"><span>배열 유효 너비 ↔ 분해능</span><strong id="arrayWidthText">504 km 배열 · ≈ 3.0 mas</strong></div>
+          <div class="array-res-head"><span>배열 유효 너비 ↔ 분해능</span><strong id="arrayWidthText">504 km 배열 · ≈ 2.9 mas</strong></div>
           <div class="array-res-Meter" aria-hidden="true"><div id="arrayWidthFill" class="array-res-fill" style="width:100%"></div></div>
-          <canvas id="arrayResCanvas" width="320" height="112" role="img" aria-label="망원경 배열 너비에 따른 합성 빔과 두 점 분해능 비교"></canvas>
+          <canvas id="arrayResCanvas" width="340" height="140" role="img" aria-label="망원경 배열 너비에 따른 가상 구경, 2D 합성 빔(PSF), 쌍성 분해 영상 및 단면 프로파일 비교"></canvas>
           <div class="array-gap-row"><label for="arrayGapRange">두 전파원 간격 <strong id="arrayGapLabel">3.8 mas</strong></label><input id="arrayGapRange" type="range" min="1" max="10" step="0.2" value="3.8" aria-label="가상 두 전파원 각거리 간격 mas"></div>
         </div>
       </div>
@@ -765,35 +765,92 @@ body {background:#0b1c25; font-family:"Apple SD Gothic Neo","Noto Sans CJK KR","
       <div class="panel-heading"><div><h2 id="labTitle">우주에서 온 신호를 그림으로</h2></div><span class="sim-flag">● 교육용 모의 데이터</span></div>
       <div id="labContent" class="lab-content">
         <div id="mode-collect" class="lab-mode">
-          <div class="view-toolbar"><b>전파 수집 원리 · 초점 맞추기 실험</b><span id="dishEffBadge" class="dish-eff-badge">🧲 정초점 일치 · 집광 효율 100%</span></div>
-          <div class="illustration-stage"><svg id="dishSvg" viewBox="0 0 500 340" class="dish-diagram" aria-label="큰 반사경에서 전파가 수신기로 모이는 원리 (수신기를 위아래로 드래그해 초점을 맞춰 보세요)" role="img">
-            <defs><linearGradient id="dishSurface" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cee9ed"/><stop offset=".6" stop-color="#71b1b7"/><stop offset="1" stop-color="#225b70"/></linearGradient></defs>
-            <g id="dishIncomingRays" stroke="#4eb5d0" stroke-opacity=".45" stroke-dasharray="5 8" stroke-width="2"><path d="M95 16V169"/><path d="M194 16V222"/><path d="M305 16V222"/><path d="M404 16V169"/></g>
-            <g id="dishReflectedRays" fill="none" stroke="#60dce6" stroke-width="2.5" class="dish-rays"><path d="M95 38L145 197L250 112"/><path d="M194 38L214 225L250 112"/><path d="M305 38L286 225L250 112"/><path d="M404 38L354 197L250 112"/></g>
-            <circle id="dishFocusTarget" cx="250" cy="112" r="11" fill="none" stroke="#72efcf" stroke-width="1.6" stroke-dasharray="3 3" opacity=".85"/>
-            <path d="M76 160 Q250 359 424 160 Q250 302 76 160" fill="url(#dishSurface)" stroke="#d6f3ff" stroke-width="4"/><path d="M76 160Q250 320 424 160" fill="none" stroke="#91d6e5" stroke-width="3"/><path d="M205 254L220 331H280L294 254" fill="#446474"/><path id="dishReceiverStrut" d="M250 120V265" stroke="#aecbd1" stroke-width="5"/>
-            <g id="dishReceiverGroup">
-              <rect id="dishReceiverBox" x="234" y="98" width="32" height="28" rx="7" fill="#ffd18f" stroke="#ffedc5" stroke-width="2"/>
-              <text id="dishReceiverLabel" x="273" y="116" class="diagram-label">수신기 (↕ 드래그)</text>
+          <div class="view-toolbar"><b>KVN 21m 전파망원경 · 포물면 반사와 정밀 초점 제어</b><span id="dishEffBadge" class="dish-eff-badge">🧲 정초점 일치 · 집광 효율 100%</span></div>
+          <div class="illustration-stage"><svg id="dishSvg" viewBox="0 0 680 390" class="dish-diagram" aria-label="KVN 21m 전파망원경 포물면 반사와 수신기 초점 정렬 시뮬레이션 (수신기를 위아래로 드래그해 초점을 맞춰 보세요)" role="img">
+            <defs>
+              <linearGradient id="dishSkyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04101c"/><stop offset=".65" stop-color="#092135"/><stop offset="1" stop-color="#0d2b42"/></linearGradient>
+              <linearGradient id="dishSurface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3f6fa"/><stop offset=".35" stop-color="#9ad4df"/><stop offset=".75" stop-color="#45889c"/><stop offset="1" stop-color="#1c495d"/></linearGradient>
+              <linearGradient id="dishUnderGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c5c70"/><stop offset="1" stop-color="#102b3a"/></linearGradient>
+              <linearGradient id="pedestalGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b4858"/><stop offset=".45" stop-color="#5c8294"/><stop offset="1" stop-color="#1d3542"/></linearGradient>
+              <linearGradient id="hornGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e0a858"/><stop offset=".5" stop-color="#ffe4b5"/><stop offset="1" stop-color="#b87b2e"/></linearGradient>
+              <radialGradient id="focusGlowGrad" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#98fff0" stop-opacity=".95"/><stop offset=".45" stop-color="#5ce1e6" stop-opacity=".4"/><stop offset="1" stop-color="#5ce1e6" stop-opacity="0"/></radialGradient>
+            </defs>
+            <rect width="680" height="390" rx="12" fill="url(#dishSkyGrad)"/>
+            <!-- Deep space stars & grid lines -->
+            <g fill="#9adced" opacity=".35"><circle cx="42" cy="36" r="1.2"/><circle cx="118" cy="24" r="1.5"/><circle cx="176" cy="52" r="1"/><circle cx="312" cy="30" r="1.4"/><circle cx="388" cy="44" r="1.1"/><circle cx="436" cy="22" r="1.6"/></g>
+            <g stroke="#1b435c" stroke-width="1" opacity=".45"><line x1="235" y1="14" x2="235" y2="365" stroke-dasharray="3 5"/><line x1="30" y1="365" x2="455" y2="365"/></g>
+            <!-- Incoming planar wavefronts and rays -->
+            <g id="dishWaveFronts" fill="none"></g>
+            <g id="dishIncomingRays" fill="none"></g>
+            <!-- Pedestal tower, elevation gear arc, and backup space-frame truss -->
+            <path d="M150 365 L168 352 H302 L320 365 Z" fill="#183242" stroke="#3c667a" stroke-width="1.2"/>
+            <path d="M196 274 L182 352 H288 L274 274 Z" fill="url(#pedestalGrad)" stroke="#6c96a8" stroke-width="1.3"/>
+            <rect x="202" y="294" width="66" height="44" rx="4" fill="#162e3d" stroke="#3c6478" stroke-width="1"/>
+            <path d="M198 278 A44 44 0 0 0 272 278" fill="none" stroke="#78a6b8" stroke-width="3.5" stroke-dasharray="4 2"/>
+            <!-- Backup truss behind parabola -->
+            <path d="M88 214 L125 256 L166 244 L202 272 L235 256 L268 272 L304 244 L345 256 L382 214" fill="none" stroke="#3e6e82" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M125 256 L202 272 H268 L345 256" fill="none" stroke="#2f5768" stroke-width="2.2"/>
+            <!-- Main 21m Parabolic Reflector: vertex at (235, 256), f = 136, rim at x=75..395, y=208.9 -->
+            <path d="M75 209 Q235 314 395 209 L386 224 Q235 326 84 224 Z" fill="url(#dishUnderGrad)" stroke="#4f889e" stroke-width="1.4"/>
+            <path d="M75 209 Q235 303 395 209 Q235 292 75 209 Z" fill="url(#dishSurface)" stroke="#d9f7ff" stroke-width="2.6"/>
+            <path d="M75 209 Q235 303 395 209" fill="none" stroke="#e8fbff" stroke-width="2.8"/>
+            <!-- Parabolic panel rib markings -->
+            <g stroke="#1b4d60" stroke-width="1.1" opacity=".55"><line x1="115" y1="229" x2="120" y2="238"/><line x1="155" y1="244" x2="158" y2="253"/><line x1="195" y1="253" x2="196" y2="262"/><line x1="235" y1="256" x2="235" y2="266"/><line x1="275" y1="253" x2="274" y2="262"/><line x1="315" y1="244" x2="312" y2="253"/><line x1="355" y1="229" x2="350" y2="238"/></g>
+            <!-- Reflected rays & converging spherical wavefronts -->
+            <g id="dishConvergingWaves" fill="none"></g>
+            <g id="dishReflectedRays" fill="none"></g>
+            <!-- Quadripod feed support struts (strictly fill="none") -->
+            <path id="dishReceiverStrut" d="M122 232 L221 112 M348 232 L249 112 M182 251 L228 112 M288 251 L242 112" fill="none" stroke="#9ec4d1" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- True geometric focal zone indicator -->
+            <circle id="dishFocusGlow" cx="235" cy="120" r="22" fill="url(#focusGlowGrad)"/>
+            <circle id="dishFocusTarget" cx="235" cy="120" r="10" fill="none" stroke="#72efcf" stroke-width="1.8" stroke-dasharray="3 3"/>
+            <!-- Interactive Draggable Receiver Assembly (Cryostat + Corrugated Feed Horn) -->
+            <g id="dishReceiverGroup" style="cursor:ns-resize">
+              <rect id="dishReceiverBox" x="215" y="82" width="40" height="24" rx="5" fill="#19384a" stroke="#7ceee2" stroke-width="2"/>
+              <path id="dishFeedHorn" d="M223 106 L216 122 H254 L247 106 Z" fill="url(#hornGrad)" stroke="#ffefc7" stroke-width="1.5"/>
+              <line id="dishApertureLine" x1="214" y1="122" x2="256" y2="122" stroke="#ffffff" stroke-width="2"/>
+              <rect id="dishDragPill" x="264" y="86" width="178" height="24" rx="12" fill="rgba(7,24,38,0.88)" stroke="#6ee7e0" stroke-width="1.2"/>
+              <text id="dishReceiverLabel" x="353" y="102" text-anchor="middle" fill="#b8f7f2" font-size="11.5" font-weight="700">🧲 정초점 일치 (0 mm)</text>
             </g>
-            <g id="dishWaveFronts" fill="#81e1ea"><circle cx="95" cy="40" r="5"/><circle cx="194" cy="40" r="5"/><circle cx="305" cy="40" r="5"/><circle cx="404" cy="40" r="5"/></g>
-            <text x="280" y="283" class="diagram-label">21m 주반사경</text><text x="16" y="21" class="diagram-label">우주에서 오는 약한 전파 ↓ (수신기를 밀어 초점에 맞춰 보세요)</text>
-          </svg><span class="stage-corner">수신기 드래그 · 자석 초점</span></div>
+            <text x="235" y="381" text-anchor="middle" class="diagram-label" fill="#9ec6d8">KVN 21m 정밀 포물면 주반사경 (4대역 동시 수신계)</text>
+            <text x="18" y="24" class="diagram-label" fill="#a8e6f0">우주에서 입사하는 평면 전파 ↓ (수신기를 위아래로 드래그해 초점을 맞추세요)</text>
+            <!-- Right-side Observatory HUD Inset: Focal Plane Airy Pattern & Live Spectrum -->
+            <g transform="translate(472, 16)">
+              <rect width="194" height="358" rx="10" fill="rgba(5,18,30,0.9)" stroke="#2b5770" stroke-width="1.4"/>
+              <text x="14" y="24" fill="#9edbe6" font-size="12" font-weight="700">초점면 전파 집광 분포 (Airy Spot)</text>
+              <rect x="14" y="34" width="166" height="122" rx="8" fill="#030d17" stroke="#1f4256" stroke-width="1"/>
+              <line x1="97" y1="38" x2="97" y2="152" stroke="#19394b" stroke-dasharray="2 2"/>
+              <line x1="18" y1="95" x2="176" y2="95" stroke="#19394b" stroke-dasharray="2 2"/>
+              <circle cx="97" cy="95" r="28" fill="none" stroke="#285268" stroke-dasharray="3 3"/>
+              <circle id="dishAiryRing" cx="97" cy="95" r="18" fill="none" stroke="#5ce1e6" stroke-width="1.5" opacity=".65"/>
+              <circle id="dishAirySpot" cx="97" cy="95" r="9" fill="url(#focusGlowGrad)"/>
+              <circle id="dishAiryCore" cx="97" cy="95" r="3.5" fill="#ffffff"/>
+              <text id="dishFocalStatus" x="97" y="147" text-anchor="middle" fill="#89ebd8" font-size="10.5" font-weight="700">정초점 수렴 · 위상 오차 0.0 rad</text>
+              <text x="14" y="180" fill="#9edbe6" font-size="12" font-weight="700">실시간 수신 스펙트럼 및 효율</text>
+              <rect x="14" y="190" width="166" height="92" rx="8" fill="#030d17" stroke="#1f4256" stroke-width="1"/>
+              <path id="dishSpectrumBase" d="M20 270 H174" stroke="#24495e" stroke-width="1"/>
+              <path id="dishSpectrumPath" d="M20 268 L97 202 L174 268" fill="rgba(108,227,221,0.18)" stroke="#6ce3dd" stroke-width="2"/>
+              <text id="dishGainText" x="14" y="304" fill="#d7f3f7" font-size="11.5" font-weight="700">안테나 이득: 77.2 dBi (효율 100%)</text>
+              <text id="dishRmsText" x="14" y="323" fill="#93bacb" font-size="11">경로차 위상 손실: 0.0 dB · Ruze 정합</text>
+              <rect x="14" y="334" width="166" height="10" rx="5" fill="#122c3c"/>
+              <rect id="dishStrehlBar" x="14" y="334" width="166" height="10" rx="5" fill="#6ee7e0"/>
+            </g>
+          </svg><span class="stage-corner">실시간 광선 추적 · 자석 초점</span></div>
           <div class="dish-interactive-bar">
-            <div class="dish-control-item"><label for="dishFocusRange"><span>수신기 초점 위치 (자석 효과)</span><strong id="dishFocusVal">0 mm (정초점)</strong></label><input id="dishFocusRange" type="range" min="-45" max="45" step="1" value="0" aria-label="수신기 초점 높이 오차"></div>
-            <div class="dish-control-item"><label for="dishAngleRange"><span>전파 입사 각도 (지향 오차)</span><strong id="dishAngleVal">0.0° (정면)</strong></label><input id="dishAngleRange" type="range" min="-8" max="8" step="0.5" value="0" aria-label="전파 입사 각도"></div>
+            <div class="dish-control-item"><label for="dishFocusRange"><span>수신기 축방향 초점 위치 (자석 ±4mm)</span><strong id="dishFocusVal">0 mm (🧲 정초점)</strong></label><input id="dishFocusRange" type="range" min="-45" max="45" step="1" value="0" aria-label="수신기 초점 높이 오차"></div>
+            <div class="dish-control-item"><label for="dishAngleRange"><span>전파 입사 각도 (지향 오차 · 자석 ±0.5°)</span><strong id="dishAngleVal">0.0° (정면 지향)</strong></label><input id="dishAngleRange" type="range" min="-8" max="8" step="0.5" value="0" aria-label="전파 입사 각도"></div>
           </div>
-          <div class="explanation-box"><strong id="dishExplainTitle">거대한 포물면 접시와 초점의 역할</strong><p id="dishExplainText">21m 포물면 주반사경은 우주에서 오는 평행한 전파를 한 점(초점)으로 모읍니다. 수신기를 위아래로 드래그해 초점에서 벗어나면 경로차가 생겨 수신 효율이 급격히 떨어지고, 초점 근처(±4 mm)로 가져가면 <b>자석 효과</b>로 정초점에 딱 맞춰집니다.</p></div>
+          <div class="explanation-box"><strong id="dishExplainTitle">거대한 포물면 접시와 초점의 역할</strong><p id="dishExplainText">21m 포물면 주반사경은 우주에서 오는 평행한 전파의 반사 경로 길이를 모두 같게 만들어 한 점(초점)으로 동위상 수렴시킵니다. 수신기를 드래그해 초점에서 벗어나면 가장자리와 중심부 전파 사이에 경로차(위상차)가 발생해 상쇄 간섭으로 수신 이득이 급감하며, 초점 근처(±4 mm)로 가져가면 <b>자석 효과</b>로 정초점에 딱 맞춰집니다.</p></div>
         </div>
         <div id="mode-sync" class="lab-mode" hidden>
-          <div class="view-toolbar"><b>두 전파 신호의 시간 맞추기</b><span id="syncFrequencyHint">43 GHz에서 1 ps ≈ 15.5°</span></div>
+          <div class="view-toolbar"><b>두 전파 신호의 시간 맞추기 (VLBI 상관기)</b><span id="syncFrequencyHint">43 GHz에서 1 ps ≈ 15.5°</span></div>
           <label class="clock-site">시계를 조절할 관측소 <select id="clockSite"><option value="ulsan">울산</option><option value="tamna">탐라</option><option value="yonsei">연세</option><option value="pyeongchang">평창</option></select></label>
           <span id="fringeReadout"></span>
-          <div id="syncDragBar" class="sync-drag-bar"><span id="syncDragHint">👆 그래프의 주황색 곡선을 손가락·마우스로 좌우로 밀어 청록색 기준 곡선과 포개 보세요!</span><span id="syncSnapPill" class="sync-snap-pill">🧲 자석 범위 ±5 ps</span></div>
-          <div class="graph-stage"><canvas id="syncCanvas" width="600" height="360" tabindex="0" aria-label="기준과 비교 신호의 위상차 및 시간 드리프트 그래프 (좌우로 드래그하여 시간차 조절)"></canvas></div>
+          <div id="syncDragBar" class="sync-drag-bar"><span id="syncDragHint">👆 그래프의 주황색 곡선 봉우리를 손가락·마우스로 좌우로 밀어 청록색 기준 봉우리와 포개 보세요!</span><span id="syncSnapPill" class="sync-snap-pill">🧲 자석 범위 ±5 ps</span></div>
+          <div class="graph-stage"><canvas id="syncCanvas" width="640" height="390" tabindex="0" aria-label="기준과 비교 신호의 위상차, 상호상관 함수 및 복소 위상자 그래프 (좌우로 드래그하여 시간차 조절)"></canvas></div>
           <div class="sync-merge-box">
-            <div class="sync-merge-head"><strong>좌우 천체 영상 병합 효과 (파형 드래그 연동)</strong><span id="syncMergeStatus">파형을 흔들면 좌우 영상이 이동하며 0 ps에서 하나로 병합됩니다</span></div>
-            <canvas id="syncMergeCanvas" width="560" height="132" role="img" aria-label="시간차에 따라 좌우 두 천체 이미지가 이동하며 하나로 일치하는 병합 화면"></canvas>
+            <div class="sync-merge-head"><strong>좌우 천체 간섭 영상 병합 모니터 (파형 드래그 실시간 연동)</strong><span id="syncMergeStatus">파형을 흔들면 좌우 영상이 이동하며 0 ps에서 하나로 병합됩니다</span></div>
+            <canvas id="syncMergeCanvas" width="600" height="164" role="img" aria-label="시간차에 따라 좌우 두 천체 이미지와 간섭 줄무늬가 이동하며 하나로 일치하는 병합 화면"></canvas>
           </div>
           <div class="clock-panel">
             <div class="clock-row"><label for="delayRange">고정 시간 오차 (자석 ±5ps) <b id="delayValue">+40 ps</b></label><input id="delayRange" type="range" min="-100" max="100" step="1" value="40" aria-label="고정 시간 오차 피코초"><span id="phaseValue">619°</span></div>
@@ -979,47 +1036,58 @@ function drawMap(){const lines=$('#baselineLines'),markers=$('#stationMarkers'),
  const active=activeSites(),actPairs=pairsFor(active);
  if(active.length>=2){
   const cx=active.reduce((s,p)=>s+p.x,0)/active.length,cy=active.reduce((s,p)=>s+p.y,0)/active.length;
-  const maxR=Math.max(22,...active.map(p=>Math.hypot(p.x-cx,p.y-cy)));
+  const maxR=Math.max(24,...active.map(p=>Math.hypot(p.x-cx,p.y-cy)));
   const isTri=active.length===3;
-  lines.append(svgEl('circle',{cx,cy,r:maxR+6,fill:isTri?'rgba(255,210,125,0.04)':'rgba(110,231,224,0.04)',stroke:isTri?'#ffd27d':'#6ee7e0','stroke-width':'1','stroke-dasharray':'3 4',opacity:'.55'}));
+  // Outer synthesized virtual telescope aperture ring
+  lines.append(svgEl('circle',{cx,cy,r:maxR+8,fill:isTri?'rgba(255,210,125,0.05)':'rgba(110,231,224,0.05)',stroke:isTri?'#ffd27d':'#6ee7e0','stroke-width':'1.2','stroke-dasharray':'4 4',opacity:'.65'}));
   if(active.length>=3){
    const ordered=active.slice().sort((a,b)=>Math.atan2(a.y-cy,a.x-cx)-Math.atan2(b.y-cy,b.x-cx));
-   lines.append(svgEl('polygon',{points:ordered.map(s=>`${s.x},${s.y}`).join(' '),fill:isTri?'rgba(255,210,125,0.14)':'rgba(110,231,224,0.09)',stroke:isTri?'#ffd27d':'#6ee7e0','stroke-width':isTri?'1.8':'1.2','stroke-linejoin':'round',opacity:'.85'}));
+   lines.append(svgEl('polygon',{points:ordered.map(s=>`${s.x},${s.y}`).join(' '),fill:isTri?'rgba(255,210,125,0.16)':'rgba(110,231,224,0.10)',stroke:isTri?'#ffd27d':'#6ee7e0','stroke-width':isTri?'2.2':'1.3','stroke-linejoin':'round',opacity:'.9'}));
   }
   const spanKm=Math.round(pairSummary().long/1000);
-  const badge=svgEl('text',{x:16,y:348,fill:isTri?'#ffd27d':'#88ece7','font-size':'11','font-weight':'700'});
-  badge.textContent=isTri?`▲ 3대 삼각형 배열 · 유효 폭 ${spanKm}km`:`◆ ${active.length}대 배열 · 유효 폭 ${spanKm}km`;
+  const badge=svgEl('text',{x:14,y:348,fill:isTri?'#ffd27d':'#88ece7','font-size':'11','font-weight':'700'});
+  badge.textContent=isTri?`▲ 3대 삼각형 간섭망 · 유효 구경 ${spanKm}km`:`◆ ${active.length}대 합성 간섭망 · 유효 구경 ${spanKm}km`;
   lines.append(badge);
  }else if(active.length===1){
   const only=active[0];
-  lines.append(svgEl('circle',{cx:only.x,cy:only.y,r:16,fill:'none',stroke:'#f7cc85','stroke-width':'1.2','stroke-dasharray':'2 3',opacity:'.75'}));
-  const badge=svgEl('text',{x:16,y:348,fill:'#f7cc85','font-size':'11','font-weight':'700'});
-  badge.textContent=`● ${only.name} 1대 단독 가동 (기선 없음 · 점 이동 없음)`;
+  lines.append(svgEl('circle',{cx:only.x,cy:only.y,r:18,fill:'rgba(247,204,133,0.08)',stroke:'#f7cc85','stroke-width':'1.3','stroke-dasharray':'3 3',opacity:'.85'}));
+  const badge=svgEl('text',{x:14,y:348,fill:'#f7cc85','font-size':'11','font-weight':'700'});
+  badge.textContent=`● ${only.name} 21m 단일경 가동 (기선 0 · 패킷 이동 없음)`;
   lines.append(badge);
  }
  for(const [a,b] of pairsFor(SITES)){
   const on=STATE.active.has(a.id)&&STATE.active.has(b.id);
   const hovered=STATE.uvHoverPair && ((STATE.uvHoverPair[0]===a.id&&STATE.uvHoverPair[1]===b.id)||(STATE.uvHoverPair[0]===b.id&&STATE.uvHoverPair[1]===a.id));
   const isTriEdge=on&&active.length===3;
-  lines.append(svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:`baseline-line${on?'':' dimmed'}`,style:hovered?'stroke:#ffe082;stroke-width:3.4;stroke-dasharray:none;opacity:1':isTriEdge?'stroke:#ffd27d;stroke-width:2.3;opacity:.96':''}));
+  if(on){
+   lines.append(svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:hovered?'rgba(255,224,130,0.35)':isTriEdge?'rgba(255,210,125,0.26)':'rgba(110,231,224,0.2)', 'stroke-width':hovered?'7':'5','stroke-linecap':'round'}));
+  }
+  lines.append(svgEl('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:`baseline-line${on?'':' dimmed'}`,style:hovered?'stroke:#ffe082;stroke-width:3.2;stroke-dasharray:none;opacity:1':isTriEdge?'stroke:#ffd27d;stroke-width:2.3;opacity:.98':''}));
+  if(hovered || isTriEdge){
+   const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dKm=Math.round(distance(a,b)/1000);
+   const pill=svgEl('rect',{x:mx-22,y:my-8,width:44,height:15,rx:5,fill:'rgba(6,20,32,0.88)',stroke:hovered?'#ffe082':'#ffd27d','stroke-width':'0.9'});
+   const lbl=svgEl('text',{x:mx,y:my+3,'text-anchor':'middle',fill:hovered?'#ffe082':'#ffd27d','font-size':'9.5','font-weight':'700'});
+   lbl.textContent=`${dKm}km`;
+   lines.append(pill,lbl);
+  }
  }
  if(active.length>=2 && !matchMedia('(prefers-reduced-motion: reduce)').matches){
   actPairs.forEach(([a,b],idx)=>{
-   const dKm=distance(a,b)/1000,dur=(1.7+dKm/260).toFixed(2)+'s';
-   const dotAB=svgEl('circle',{r:3.0,fill:a.color,stroke:'#061826','stroke-width':'0.9'});
-   dotAB.append(svgEl('animateMotion',{path:`M ${a.x} ${a.y} L ${b.x} ${b.y}`,dur,begin:`${(idx*0.25).toFixed(2)}s`,repeatCount:'indefinite'}));
+   const dKm=distance(a,b)/1000,dur=(1.65+dKm/250).toFixed(2)+'s';
+   const dotAB=svgEl('circle',{r:3.2,fill:a.color,stroke:'#061826','stroke-width':'1'});
+   dotAB.append(svgEl('animateMotion',{path:`M ${a.x} ${a.y} L ${b.x} ${b.y}`,dur,begin:`${(idx*0.22).toFixed(2)}s`,repeatCount:'indefinite'}));
    packets.append(dotAB);
-   const dotBA=svgEl('circle',{r:3.0,fill:b.color,stroke:'#061826','stroke-width':'0.9'});
-   dotBA.append(svgEl('animateMotion',{path:`M ${b.x} ${b.y} L ${a.x} ${a.y}`,dur,begin:`${(idx*0.25+parseFloat(dur)/2).toFixed(2)}s`,repeatCount:'indefinite'}));
+   const dotBA=svgEl('circle',{r:3.2,fill:b.color,stroke:'#061826','stroke-width':'1'});
+   dotBA.append(svgEl('animateMotion',{path:`M ${b.x} ${b.y} L ${a.x} ${a.y}`,dur,begin:`${(idx*0.22+parseFloat(dur)/2).toFixed(2)}s`,repeatCount:'indefinite'}));
    packets.append(dotBA);
   });
  }
  for(const s of SITES){
   let on=STATE.active.has(s.id);
   const grp=svgEl('g',{'data-marker':s.id,class:'map-point-group',opacity:on?'1':'.48',role:'button',tabindex:'0','aria-label':`${s.name} 전파망원경 ${on?'켜짐':'꺼짐'}`});
-  if(on && active.length===3) grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:13,fill:'none',stroke:'#ffd27d','stroke-width':'1.2','stroke-dasharray':'3 2',opacity:'.8'}));
-  grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:on?10:8,fill:s.color,'fill-opacity':on?'.16':'.04',stroke:s.color,'stroke-opacity':on?'.9':'.4','stroke-width':1.2}));
-  grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:4.5,fill:on?s.color:'#526878',stroke:'#092032','stroke-width':1.3}));
+  if(on && active.length===3) grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:13.5,fill:'none',stroke:'#ffd27d','stroke-width':'1.4','stroke-dasharray':'3 2',opacity:'.9'}));
+  grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:on?10.5:8,fill:s.color,'fill-opacity':on?'.18':'.04',stroke:s.color,'stroke-opacity':on?'.92':'.4','stroke-width':1.3}));
+  grp.append(svgEl('circle',{cx:s.x,cy:s.y,r:4.6,fill:on?s.color:'#526878',stroke:'#092032','stroke-width':1.4}));
   let dx=s.id==='ulsan'?11:s.id==='pyeongchang'?11:-(s.id==='yonsei'?28:25),dy=s.id==='tamna'?-12:-(s.id==='pyeongchang'?13:12);
   const tx=svgEl('text',{x:s.x+dx,y:s.y+dy,class:'map-point-name'});tx.textContent=s.name;grp.append(tx);
   grp.onclick=()=>{const card=$(`[data-station="${s.id}"]`);if(card)card.click();};
@@ -1039,42 +1107,66 @@ function drawArrayResolutionPreview(){
  const fillPct=ps.pairCount?Math.max(12,Math.min(100,Math.round(longKm/504*100))):count===1?4:0;
  widthFill.style.width=`${fillPct}%`;
  widthFill.style.background=count>=4?'linear-gradient(90deg,#59d8d1,#7ae7b8)':count===3?'linear-gradient(90deg,#f6bd76,#ffd27d)':'linear-gradient(90deg,#f29e9e,#f7cc85)';
- widthText.textContent=ps.pairCount?`유효 폭 ${Math.round(longKm)} km (남북 ${Math.round(northKm)}km) · 분해능 ≈ ${resMas.toFixed(1)} mas`:count===1?`단일경 21 m (기선 없음) · 분해능 ≈ ${Math.round(resMas/1000)}″`:`관측소 미선택`;
+ widthText.textContent=ps.pairCount?`유효 구경 ${Math.round(longKm)} km (남북 ${Math.round(northKm)}km) · 분해능 ≈ ${resMas.toFixed(1)} mas`:count===1?`단일경 21 m (기선 0) · 분해능 ≈ ${Math.round(resMas/1000)}″`:`관측소 미선택`;
  if(gapLabel)gapLabel.textContent=`${STATE.arrayGapMas.toFixed(1)} mas`;
  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
- c.clearRect(0,0,w,h);c.fillStyle='#061624';c.fillRect(0,0,w,h);
- c.strokeStyle='rgba(130,196,220,0.18)';c.beginPath();c.moveTo(148,8);c.lineTo(148,h-8);c.stroke();
- // Left panel: Effective Array Span & Synthesized Beam Shape (PSF)
- const lcx=74,lcy=58,maxSpanR=34;
- c.strokeStyle='rgba(110,231,224,0.22)';c.setLineDash([2,2]);c.beginPath();c.arc(lcx,lcy,maxSpanR,0,TAU);c.stroke();c.setLineDash([]);
- const curR=ps.pairCount?Math.max(8,maxSpanR*(longKm/504)):count===1?3.5:0;
+ c.clearRect(0,0,w,h);c.fillStyle='#051320';c.fillRect(0,0,w,h);
+ c.strokeStyle='rgba(120,196,220,0.16)';c.beginPath();c.moveTo(106,8);c.lineTo(106,h-8);c.moveTo(202,8);c.lineTo(202,h-8);c.stroke();
+ // Col 1: Virtual Aperture Geometry (504km outer rim vs active polygon/triangle)
+ const c1x=53,c1y=68,maxR=35;
+ c.strokeStyle='rgba(110,231,224,0.22)';c.setLineDash([2,2]);c.beginPath();c.arc(c1x,c1y,maxR,0,TAU);c.stroke();c.setLineDash([]);
+ const curR=ps.pairCount?Math.max(9,maxR*(longKm/504)):count===1?3.5:0;
  if(curR>0){
-  c.fillStyle=count>=4?'rgba(110,231,224,0.12)':count===3?'rgba(255,210,125,0.14)':'rgba(242,158,158,0.18)';
-  c.strokeStyle=count>=4?'#6ee7e0':count===3?'#ffd27d':'#f29e9e';c.lineWidth=1.5;
-  if(count===3){
+  c.fillStyle=count>=4?'rgba(110,231,224,0.13)':count===3?'rgba(255,210,125,0.16)':'rgba(242,158,158,0.2)';
+  c.strokeStyle=count>=4?'#6ee7e0':count===3?'#ffd27d':'#f29e9e';c.lineWidth=1.6;
+  c.beginPath();c.arc(c1x,c1y,curR,0,TAU);c.fill();c.stroke();
+  if(count>=2){
+   const ordered=active.slice().sort((a,b)=>Math.atan2(a.lat-36.0,a.lon-127.8)-Math.atan2(b.lat-36.0,b.lon-127.8));
    c.beginPath();
-   active.forEach((s,i)=>{const px=lcx+(s.lon-127.9)*11,py=lcy-(s.lat-36.7)*14;if(!i)c.moveTo(px,py);else c.lineTo(px,py);});
-   c.closePath();c.fill();c.stroke();
-  }else{
-   c.beginPath();c.arc(lcx,lcy,curR,0,TAU);c.fill();c.stroke();
+   ordered.forEach((s,i)=>{const px=c1x+(s.lon-127.8)*11.5,py=c1y-(s.lat-36.0)*12.5;if(!i)c.moveTo(px,py);else c.lineTo(px,py);});
+   c.closePath();c.strokeStyle=count===3?'#ffd27d':'#7ef5ea';c.fillStyle=count===3?'rgba(255,210,125,0.22)':'rgba(110,231,224,0.16)';c.fill();c.stroke();
+   ordered.forEach(s=>{const px=c1x+(s.lon-127.8)*11.5,py=c1y-(s.lat-36.0)*12.5;c.fillStyle=s.color;c.beginPath();c.arc(px,py,2.6,0,TAU);c.fill();});
   }
  }
- // Draw synthesized beam ellipse inside the left panel corner
- const beamRx=ps.pairCount?Math.max(4,4.2*(220/Math.max(90,eastKm))):20;
- const beamRy=ps.pairCount?Math.max(4,4.2*(480/Math.max(110,northKm))):20;
- c.fillStyle='rgba(255,255,255,0.85)';c.beginPath();c.ellipse(lcx,lcy,Math.min(26,beamRx),Math.min(26,beamRy),0,0,TAU);c.fill();
- c.fillStyle='#9edbe6';c.font='bold 10px sans-serif';c.fillText('가상 구경 폭 vs 합성 빔',10,16);
- c.fillStyle='#b9d6e2';c.font='10px sans-serif';
- c.fillText(ps.pairCount?`구경 폭 ${Math.round(longKm)}km (${count===3?'삼각형':'배열'})`:'단일경 21m (기선 0)',10,h-8);
- // Right panel: Two-source resolving power profile & 2D preview
- const rLeft=158,rW=w-rLeft-10,rcx=rLeft+rW/2;
- c.fillStyle='#9edbe6';c.font='bold 10px sans-serif';c.fillText(`쌍성 분해 실험 (간격 ${STATE.arrayGapMas.toFixed(1)} mas)`,rLeft,16);
- const effResMas=ps.pairCount?Math.max(resMas, (lambda/(Math.max(120,northKm)*1000)/MAS)*0.82):999;
- const sigmaMas=Math.max(0.45,effResMas*0.44);
- const halfSep=STATE.arrayGapMas/2;
- const profY0=84,profH=48;
- c.strokeStyle='rgba(120,231,224,0.22)';c.beginPath();c.moveTo(rLeft,profY0);c.lineTo(w-10,profY0);c.stroke();
- // Reference 504km curve (dashed faint)
+ c.fillStyle='#9edbe6';c.font='bold 10px sans-serif';c.fillText('1. 가상 구경 폭',10,15);
+ c.fillStyle='#bdd9e5';c.font='9.5px sans-serif';
+ c.fillText(ps.pairCount?`폭 ${Math.round(longKm)}km (${count===3?'삼각형':'배열'})`:'단일경 21m',10,h-8);
+ // Col 2: 2D Synthesized Beam (PSF) Heatmap
+ const c2x=154,c2y=68;
+ const beamRx=ps.pairCount?Math.max(4.5,5.5*(210/Math.max(85,eastKm))*(43/STATE.freq)):26;
+ const beamRy=ps.pairCount?Math.max(4.5,5.5*(478/Math.max(95,northKm))*(43/STATE.freq)):26;
+ const bg=c.createRadialGradient(c2x,c2y,1,c2x,c2y,28);
+ bg.addColorStop(0,'rgba(255,248,220,0.95)');
+ bg.addColorStop(0.45,count>=4?'rgba(110,231,224,0.55)':count===3?'rgba(255,210,125,0.6)':'rgba(242,158,158,0.65)');
+ bg.addColorStop(1,'rgba(6,22,36,0)');
+ c.save();c.translate(c2x,c2y);c.scale(Math.min(2.2,beamRx/10),Math.min(2.4,beamRy/10));
+ c.fillStyle=bg;c.beginPath();c.arc(0,0,22,0,TAU);c.fill();
+ c.strokeStyle=count>=4?'#6ee7e0':count===3?'#ffd27d':'#f29e9e';c.lineWidth=1.1;
+ c.beginPath();c.arc(0,0,9.5,0,TAU);c.stroke();c.restore();
+ c.fillStyle='#9edbe6';c.font='bold 10px sans-serif';c.fillText('2. 합성 빔(PSF)',114,15);
+ c.fillStyle='#bdd9e5';c.font='9.5px sans-serif';
+ c.fillText(ps.pairCount?`남북 빔폭 ${(lambda/(Math.max(110,northKm)*1000)/MAS).toFixed(1)}mas`:'빔폭 ≈ 40″',114,h-8);
+ // Col 3: 2D Simulated Binary Source Image + 1D Cross-Section Profile
+ const rLeft=210,rW=w-rLeft-8;
+ c.fillStyle='#9edbe6';c.font='bold 10px sans-serif';c.fillText(`3. 쌍성 분해 (${STATE.arrayGapMas.toFixed(1)}mas)`,rLeft,15);
+ const effResMas=ps.pairCount?Math.max(resMas,(lambda/(Math.max(120,northKm)*1000)/MAS)*0.82):999;
+ const sigmaMas=Math.max(0.45,effResMas*0.44),halfSep=STATE.arrayGapMas/2;
+ // 2D simulated sky strip at y = 24..54
+ const stripY=23,stripH=28;
+ c.fillStyle='#020a12';c.fillRect(rLeft,stripY,rW,stripH);
+ const s1x=rLeft+rW*(0.5-halfSep/10),s2x=rLeft+rW*(0.5+halfSep/10),sy=stripY+stripH/2;
+ const spotR=ps.pairCount?Math.max(4,Math.min(28,sigmaMas/10*rW*1.65)):36;
+ for(const sx of [s1x,s2x]){
+  const g=c.createRadialGradient(sx,sy,0.5,sx,sy,spotR);
+  g.addColorStop(0,'rgba(255,245,210,0.9)');
+  g.addColorStop(0.45,count>=4?'rgba(105,230,224,0.55)':count===3?'rgba(255,195,105,0.55)':'rgba(242,140,140,0.5)');
+  g.addColorStop(1,'rgba(2,10,18,0)');
+  c.save();c.globalCompositeOperation='lighter';c.fillStyle=g;c.beginPath();c.arc(sx,sy,spotR,0,TAU);c.fill();c.restore();
+ }
+ c.strokeStyle='#1d4054';c.strokeRect(rLeft,stripY,rW,stripH);
+ // 1D Intensity Profile below the 2D strip
+ const profY0=112,profH=48;
+ c.strokeStyle='rgba(120,231,224,0.22)';c.beginPath();c.moveTo(rLeft,profY0);c.lineTo(w-8,profY0);c.stroke();
  const refSigma=Math.max(0.45,(lambda/504000/MAS)*0.44);
  c.strokeStyle='rgba(110,231,224,0.32)';c.setLineDash([2,2]);c.lineWidth=1.1;c.beginPath();
  for(let px=0;px<=rW;px++){
@@ -1084,12 +1176,10 @@ function drawArrayResolutionPreview(){
   if(!px)c.moveTo(rLeft+px,y);else c.lineTo(rLeft+px,y);
  }
  c.stroke();c.setLineDash([]);
- // Current array curve
- let peakVal=0,midVal=0;
- const pts=[];
+ let peakVal=0,midVal=0;const pts=[];
  for(let px=0;px<=rW;px++){
   const mas=(px/rW-0.5)*10;
-  const v=ps.pairCount?(Math.exp(-0.5*Math.pow((mas+halfSep)/sigmaMas,2))+Math.exp(-0.5*Math.pow((mas-halfSep)/sigmaMas,2))):1.1*Math.exp(-0.5*Math.pow(mas/6.5,2));
+  const v=ps.pairCount?(Math.exp(-0.5*Math.pow((mas+halfSep)/sigmaMas,2))+Math.exp(-0.5*Math.pow((mas-halfSep)/sigmaMas,2))):1.1*Math.exp(-0.5*Math.pow(mas/6.2,2));
   peakVal=Math.max(peakVal,v);if(Math.abs(mas)<0.15)midVal=v;
   pts.push([rLeft+px,v]);
  }
@@ -1098,8 +1188,8 @@ function drawArrayResolutionPreview(){
  c.stroke();
  const resolved=ps.pairCount && midVal<peakVal*0.76;
  const marginal=ps.pairCount && !resolved && midVal<peakVal*0.94;
- c.fillStyle=resolved?'#7ae7b8':marginal?'#ffd27d':'#f29e9e';c.font='bold 10px sans-serif';
- c.fillText(resolved?'✓ 두 천체 뚜렷이 분리됨':marginal?'△ 경계가 겹쳐 흐릿함':'✕ 하나로 뭉개짐 (분해 불가)',rLeft,h-8);
+ c.fillStyle=resolved?'#7ae7b8':marginal?'#ffd27d':'#f29e9e';c.font='bold 9.5px sans-serif';
+ c.fillText(resolved?'✓ 두 전파원 분리 성공':marginal?'△ 경계 겹침 (흐릿함)':'✕ 하나로 뭉개짐 (분해 불가)',rLeft,h-8);
 }
 function drawWaves(t){for(let i=0;i<SITES.length;i++){let s=SITES[i],canvas=$(`#wave-${s.id}`),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,on=STATE.active.has(s.id);ctx.clearRect(0,0,w,h);ctx.beginPath();ctx.strokeStyle=on?'#78e7e0':'#5f7580';ctx.lineWidth=1.8;
  for(let x=0;x<w;x++){let y=h/2+(on?Math.sin(x*.25+t*.004+i)*5.5+Math.sin(x*.63-t*.006+i)*2.2:0);if(!x)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();}}
@@ -1174,91 +1264,123 @@ function queueCompute(resumeFrame=0){
  },35);
  if(STATE.mode==='image')drawImaging();
 }
-function drawUv(canvas){if(!science)return;const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);c.fillStyle='#081724';c.fillRect(0,0,w,h);
+function drawUv(canvas){if(!science)return;const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);c.fillStyle='#061522';c.fillRect(0,0,w,h);
  const midx=w/2,midy=h/2,side=Math.min(w,h)*.39;
  const lim=Math.max(8,504000*STATE.freq*1e9/C*FOV*1.15);
- c.lineWidth=1;for(let i=-4;i<=4;i++){let x=midx+i*side/4,y=midy+i*side/4;c.strokeStyle='#244758';c.beginPath();c.moveTo(x,16);c.lineTo(x,h-16);c.moveTo(16,y);c.lineTo(w-16,y);c.stroke();}
- c.strokeStyle='#5e8d9e';c.beginPath();c.moveTo(midx,10);c.lineTo(midx,h-10);c.moveTo(12,midy);c.lineTo(w-12,midy);c.stroke();
+ c.lineWidth=1;for(let i=-4;i<=4;i++){let x=midx+i*side/4,y=midy+i*side/4;c.strokeStyle='#1d3e50';c.beginPath();c.moveTo(x,16);c.lineTo(x,h-16);c.moveTo(16,y);c.lineTo(w-16,y);c.stroke();}
+ c.strokeStyle='#4e7c8f';c.beginPath();c.moveTo(midx,10);c.lineTo(midx,h-10);c.moveTo(12,midy);c.lineTo(w-12,midy);c.stroke();
  // Outer reference rings for 504km vs 305km
  const r504=(504000*STATE.freq*1e9/C*FOV)/lim*side,r305=(305000*STATE.freq*1e9/C*FOV)/lim*side;
- c.setLineDash([3,3]);c.strokeStyle='rgba(110,231,224,0.28)';c.beginPath();c.arc(midx,midy,r504,0,TAU);c.stroke();
- c.strokeStyle='rgba(255,210,125,0.28)';c.beginPath();c.arc(midx,midy,r305,0,TAU);c.stroke();c.setLineDash([]);
+ c.setLineDash([4,4]);c.strokeStyle='rgba(110,231,224,0.34)';c.beginPath();c.arc(midx,midy,r504,0,TAU);c.stroke();
+ c.strokeStyle='rgba(255,210,125,0.34)';c.beginPath();c.arc(midx,midy,r305,0,TAU);c.stroke();c.setLineDash([]);
+ c.fillStyle='rgba(110,231,224,0.68)';c.font='10.5px sans-serif';c.fillText('504km 외곽 한계 (4대)',midx+6,midy-r504+12);
+ c.fillStyle='rgba(255,210,125,0.75)';c.fillText('305km 한계 (탐라 제외 3대)',midx+6,midy-r305+12);
  const uv=science.uv;
  for(let i=0;i<uv.length;i++){
   const [u,v,aid,bid]=uv[i],x=midx+u/lim*side,y=midy-v/lim*side;
   if(x<14||x>w-14||y<14||y>h-14)continue;
   const hovered=STATE.uvHoverPair && ((STATE.uvHoverPair[0]===aid&&STATE.uvHoverPair[1]===bid)||(STATE.uvHoverPair[0]===bid&&STATE.uvHoverPair[1]===aid));
-  c.fillStyle=hovered?'#ffe082':'#6ce3dd';
-  c.globalAlpha=hovered?1:.76;
-  c.beginPath();c.arc(x,y,hovered?3.6:2.1,0,TAU);c.fill();
+  const sColor=SITES.find(s=>s.id===aid)?.color||'#6ce3dd';
+  c.fillStyle=hovered?'#ffe082':sColor;
+  c.globalAlpha=hovered?1:.78;
+  c.beginPath();c.arc(x,y,hovered?4.2:2.3,0,TAU);c.fill();
  }
  c.globalAlpha=1;
- c.fillStyle='#a0c7d6';c.font='13px sans-serif';c.fillText('u →',w-52,midy-9);c.fillText('v ↑',midx+8,23);c.fillStyle='#678a9a';c.font='11px sans-serif';c.fillText('바깥 원: 504km(4대) · 안쪽 원: 305km(탐라 제외 3대)',14,h-13);
+ c.fillStyle='#a0c7d6';c.font='13px sans-serif';c.fillText('u (동-서 공간주파수) →',w-148,midy-9);c.fillText('v (남-북) ↑',midx+8,23);c.fillStyle='#7ca2b4';c.font='11px sans-serif';c.fillText('점 위에 마우스/손가락을 올리면 해당 기선(망원경 쌍)과 공간주파수 궤적이 강조됩니다',14,h-13);
  }
 function drawSyncMerge(){
  const canvas=$('#syncMergeCanvas'),status=$('#syncMergeStatus');
  if(!canvas)return;
  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
- c.clearRect(0,0,w,h);c.fillStyle='#051320';c.fillRect(0,0,w,h);
+ c.clearRect(0,0,w,h);
+ const bg=c.createLinearGradient(0,0,0,h);
+ bg.addColorStop(0,'#030d18');bg.addColorStop(1,'#071b2c');
+ c.fillStyle=bg;c.fillRect(0,0,w,h);
  const locked=STATE.offsetPs===0 && STATE.active.has(clockSite) && STATE.active.size>=2;
  const driftCoherence=clockCoherence();
- const shiftPx=STATE.offsetPs*1.65;
- const cx=w/2,cy=h/2+4;
- // Background coordinate grid
- c.strokeStyle='rgba(120,210,230,0.12)';c.lineWidth=1;
- for(let x=40;x<w;x+=55){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke();}
- c.beginPath();c.moveTo(0,cy);c.lineTo(w,cy);c.stroke();
- // Helper to draw a celestial source layer (core + jet/ring) at xPos
- const target=TARGETS[STATE.targetId]||TARGETS.m87||{name:'M87'};
- const drawSourceLayer=(xPos,yPos,tintR,tintG,tintB,alpha,label)=>{
+ const shiftPx=STATE.offsetPs*1.85;
+ const cx=w/2,cy=h/2+6;
+ // Astronomical RA / Dec coordinate grid & field stars
+ c.strokeStyle='rgba(110,195,220,0.11)';c.lineWidth=1;
+ for(let x=30;x<w;x+=45){c.beginPath();c.moveTo(x,0);c.lineTo(x,h);c.stroke();}
+ for(let y=24;y<h;y+=35){c.beginPath();c.moveTo(0,y);c.lineTo(w,y);c.stroke();}
+ c.strokeStyle='rgba(110,231,224,0.24)';c.setLineDash([3,4]);
+ c.beginPath();c.moveTo(cx,26);c.lineTo(cx,h-8);c.moveTo(20,cy);c.lineTo(w-20,cy);c.stroke();c.setLineDash([]);
+ const isCrab=STATE.targetId==='crab';
+ // Realistic multi-component celestial brightness renderer (M87 relativistic jet knots OR Crab Nebula pulsar wind filaments)
+ const drawCelestialBody=(xPos,yPos,rCol,gCol,bCol,alpha,label)=>{
   c.save();
   c.globalCompositeOperation='lighter';
-  const rOuter=44;
-  const g1=c.createRadialGradient(xPos,yPos,2,xPos,yPos,rOuter);
-  g1.addColorStop(0,`rgba(${tintR},${tintG},${tintB},${(0.92*alpha).toFixed(3)})`);
-  g1.addColorStop(0.35,`rgba(${tintR},${tintG},${tintB},${(0.42*alpha).toFixed(3)})`);
-  g1.addColorStop(1,`rgba(${tintR},${tintG},${tintB},0)`);
-  c.fillStyle=g1;c.beginPath();c.arc(xPos,yPos,rOuter,0,TAU);c.fill();
-  // Jet / structure feature so horizontal alignment is visually unmistakable
-  c.strokeStyle=`rgba(${tintR},${tintG},${tintB},${(0.75*alpha).toFixed(3)})`;
-  c.lineWidth=2.2;c.beginPath();c.ellipse(xPos,yPos,16,9,-0.35,0,TAU);c.stroke();
-  c.beginPath();c.moveTo(xPos-22,yPos+10);c.lineTo(xPos+24,yPos-11);c.stroke();
-  c.fillStyle=`rgba(255,255,255,${(0.9*alpha).toFixed(3)})`;
-  c.beginPath();c.arc(xPos,yPos,4.2,0,TAU);c.fill();
+  if(isCrab){
+   // Crab Nebula filamentary shell + pulsar wind torus
+   for(const [dx,dy,rx,ry,ang,str] of [[0,0,46,30,-0.3,0.45],[-10,-6,26,15,0.4,0.65],[12,7,28,16,-0.5,0.55],[0,0,12,7,-0.3,0.95]]){
+    c.save();c.translate(xPos+dx,yPos+dy);c.rotate(ang);
+    const g=c.createRadialGradient(0,0,1,0,0,rx);
+    g.addColorStop(0,`rgba(255,250,235,${(str*alpha).toFixed(3)})`);
+    g.addColorStop(0.4,`rgba(${rCol},${gCol},${bCol},${(str*0.65*alpha).toFixed(3)})`);
+    g.addColorStop(1,`rgba(${rCol},${gCol},${bCol},0)`);
+    c.fillStyle=g;c.scale(1,ry/rx);c.beginPath();c.arc(0,0,rx,0,TAU);c.fill();c.restore();
+   }
+  }else{
+   // M87 active galactic nucleus core + relativistic jet knots (HST-1, Knot A, B, C)
+   const knots=[[0,0,22,1.0],[-14,7,14,0.72],[-28,14,16,0.62],[-42,21,18,0.42],[13,-6,11,0.28]];
+   for(const [kx,ky,kr,kstr] of knots){
+    const g=c.createRadialGradient(xPos+kx,yPos+ky,0.8,xPos+kx,yPos+ky,kr*1.8);
+    g.addColorStop(0,`rgba(255,252,240,${(kstr*alpha).toFixed(3)})`);
+    g.addColorStop(0.35,`rgba(${rCol},${gCol},${bCol},${(kstr*0.72*alpha).toFixed(3)})`);
+    g.addColorStop(1,`rgba(${rCol},${gCol},${bCol},0)`);
+    c.fillStyle=g;c.beginPath();c.arc(xPos+kx,yPos+ky,kr*1.8,0,TAU);c.fill();
+   }
+  }
   c.restore();
   if(label){
-   c.fillStyle=`rgba(${tintR},${tintG},${tintB},0.92)`;c.font='bold 11px sans-serif';c.textAlign='center';
-   c.fillText(label,xPos,yPos-28);
+   c.fillStyle=`rgba(${rCol},${gCol},${bCol},0.94)`;c.font='bold 11px sans-serif';c.textAlign='center';
+   c.fillText(label,xPos,yPos-38);
   }
  };
- const leftX=cx-shiftPx*0.55, rightX=cx+shiftPx*0.55;
+ const leftX=cx-shiftPx*0.58,rightX=cx+shiftPx*0.58;
  const mergeQuality=Math.exp(-Math.abs(STATE.offsetPs)/14)*driftCoherence;
- drawSourceLayer(leftX,cy,105,232,230,0.82,Math.abs(STATE.offsetPs)>4?'기준 관측소 A':null);
- drawSourceLayer(rightX,cy,250,198,118,0.82*Math.max(0.35,driftCoherence),Math.abs(STATE.offsetPs)>4?`${siteName()} 기록 B`:null);
+ drawCelestialBody(leftX,cy,95,235,232,0.86,Math.abs(STATE.offsetPs)>3?'기준 관측소 A 파면':null);
+ drawCelestialBody(rightX,cy,255,196,110,0.86*Math.max(0.35,driftCoherence),Math.abs(STATE.offsetPs)>3?`${siteName()} 관측소 B 파면`:null);
+ // Realistic Young's interference fringe pattern in the overlap region
+ const overlap=Math.max(0,1-Math.abs(STATE.offsetPs)/55)*driftCoherence;
+ if(overlap>0.08){
+  c.save();c.globalCompositeOperation='lighter';
+  const fringeFreq=0.18+Math.abs(STATE.offsetPs)*0.008,phaseRad=TAU*clockCycles(STATE.offsetPs);
+  for(let x=Math.max(40,Math.floor(cx-75));x<=Math.min(w-40,Math.ceil(cx+75));x+=2){
+   const env=Math.exp(-0.5*Math.pow((x-cx)/36,2));
+   const fVal=0.5+0.5*Math.cos((x-cx)*fringeFreq+phaseRad);
+   c.fillStyle=`rgba(165,255,240,${(env*fVal*overlap*0.26).toFixed(3)})`;
+   c.fillRect(x,cy-32,1.6,64);
+  }
+  c.restore();
+ }
  if(locked){
   c.save();
-  c.strokeStyle='#6ee7e0';c.lineWidth=1.8;c.setLineDash([4,3]);
-  c.beginPath();c.arc(cx,cy,32,0,TAU);c.stroke();c.setLineDash([]);
+  c.strokeStyle='#6ee7e0';c.lineWidth=1.8;c.setLineDash([5,3]);
+  c.beginPath();c.arc(cx,cy,42,0,TAU);c.stroke();c.setLineDash([]);
   c.fillStyle='#a8fff0';c.font='bold 12px sans-serif';c.textAlign='center';
-  c.fillText(`✦ 두 천체 영상 병합 완료 (간섭 신호 ${Math.round(driftCoherence*100)}%)`,cx,22);
+  c.fillText(`✦ 동위상 간섭 영상 병합 완료! (${isCrab?'게성운 필라멘트':'M87 중심핵·제트'} · 가시도 ${Math.round(driftCoherence*100)}%)`,cx,20);
   c.restore();
  }else{
-  // Draw horizontal convergence arrows between the two displaced images
   c.save();
-  c.strokeStyle='rgba(255,214,133,0.65)';c.lineWidth=1.5;
-  c.beginPath();c.moveTo(leftX,cy+30);c.lineTo(rightX,cy+30);c.stroke();
-  c.fillStyle='#ffd27d';c.font='11px sans-serif';c.textAlign='center';
-  c.fillText(`⇄ 파형을 밀면 좌우 천체 영상이 이동해 중앙에서 합쳐집니다 (현재 오차 ${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps)`,cx,22);
+  c.strokeStyle='rgba(255,214,133,0.7)';c.lineWidth=1.5;
+  c.beginPath();c.moveTo(leftX,cy+40);c.lineTo(rightX,cy+40);c.stroke();
+  c.fillStyle='#ffd27d';c.font='11.5px sans-serif';c.textAlign='center';
+  c.fillText(`⇄ 위 파형(또는 이 화면)을 좌우로 밀면 두 천체 영상이 이동해 중앙(0 ps)에서 하나로 합쳐집니다 [현재 ${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps]`,cx,20);
   c.restore();
  }
  if(status){
-  status.textContent=locked?`🧲 자석 결합 완료 (0 ps · 선명도 ${Math.round(mergeQuality*100)}%)`:`좌우 분리됨 (${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps · 일치율 ${Math.round(mergeQuality*100)}%)`;
+  status.textContent=locked?`🧲 자석 결합 완료 (0 ps · 간섭 일치율 ${Math.round(mergeQuality*100)}%)`:`좌우 분리됨 (${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps · 일치율 ${Math.round(mergeQuality*100)}%)`;
   status.style.color=locked?'#7ae7b8':'#ffd27d';
  }
 }
 function drawSync(){
  const canvas=$('#syncCanvas'),c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
- c.clearRect(0,0,w,h);c.fillStyle='#071a29';c.fillRect(0,0,w,h);
+ c.clearRect(0,0,w,h);
+ const bg=c.createLinearGradient(0,0,0,h);
+ bg.addColorStop(0,'#051422');bg.addColorStop(1,'#081e30');
+ c.fillStyle=bg;c.fillRect(0,0,w,h);
  const phase=TAU*clockCycles(STATE.offsetPs),driftPhase=TAU*clockCycles(STATE.driftPs),coherence=clockCoherence();
  const locked=STATE.offsetPs===0;
  const snapPill=$('#syncSnapPill'),dragHint=$('#syncDragHint');
@@ -1267,54 +1389,98 @@ function drawSync(){
   snapPill.textContent=locked?'🧲 자석 결합됨 (0 ps · 위상 0°)':'🧲 자석 포착 범위 ±5 ps';
  }
  if(dragHint){
-  dragHint.textContent=locked?'✦ 두 파형 봉우리가 정확히 겹쳤습니다! 좌우로 다시 밀어 흔들어 볼 수도 있습니다.':'⇄ 중앙 파형 그래프를 손가락이나 마우스로 좌우로 밀어 두 봉우리를 겹쳐 보세요';
+  dragHint.textContent=locked?'✦ 두 파형 봉우리가 정확히 일치했습니다! 다시 좌우로 밀어 파형과 영상 분리를 실험해 보세요.':'👆 주황색 파형 봉우리를 손가락·마우스로 좌우로 밀어 중앙 자석 구간(±5 ps)에 맞춰 보세요!';
  }
  $('#fringeReadout').textContent=STATE.active.has(clockSite)&&STATE.active.size>=2?'위상차 '+Math.round(clockPhaseDegrees(STATE.offsetPs))+'° · 흔들림 뒤 남은 신호 '+Math.round(coherence*100)+'% · 프린지 실수 성분 '+(Math.cos(phase)*(driftPhase===0?1:Math.sin(driftPhase/2)/(driftPhase/2))).toFixed(2):'두 기록을 비교하려면 선택한 관측소와 다른 한 곳을 켜세요.';
- for(let j=0;j<2;j++){const cy=j===0?137:300;c.strokeStyle='#234a5a';c.lineWidth=1;
-  c.beginPath();c.moveTo(22,cy);c.lineTo(w-20,cy);c.stroke();
-  for(let x=24;x<w-22;x+=46){c.beginPath();c.moveTo(x,cy-55);c.lineTo(x,cy+55);c.stroke();}}
- const midX=w/2,pxPerPs=2.7,shiftPx=STATE.offsetPs*pxPerPs,snapHalfPx=5*pxPerPs;
- // Draw Magnetic Snap Zone around midX on Lane 1
- c.fillStyle=locked?'rgba(110,231,224,0.16)':'rgba(255,210,125,0.11)';
- c.fillRect(midX-snapHalfPx,74,snapHalfPx*2,126);
- c.strokeStyle=locked?'#6ee7e0':'rgba(255,210,125,0.65)';c.lineWidth=1.3;c.setLineDash([4,3]);
- c.beginPath();c.moveTo(midX,70);c.lineTo(midX,204);c.stroke();c.setLineDash([]);
- c.textAlign='left';c.font='bold 17px sans-serif';c.fillStyle='#9edbe6';c.fillText('같은 천체에서 온 전파 파형 (손가락/마우스로 좌우 드래그)',24,30);
- c.font='13px sans-serif';c.fillStyle='#92b4c5';c.fillText('선택 주파수 '+STATE.freq+' GHz · '+(1000/STATE.freq).toFixed(1)+' ps/주기 · 중앙 점선(±5 ps) 근처로 밀면 자석처럼 딱 붙습니다',24,50);
- // First lane: Reference wave packet A vs Draggable shifted wave packet B
+ // Oscilloscope grid for Lane 1 and Lane 2
+ for(let j=0;j<2;j++){
+  const cy=j===0?140:298,rightLim=j===0?w-22:w-128;
+  c.strokeStyle='#1d4052';c.lineWidth=1;
+  c.beginPath();c.moveTo(22,cy);c.lineTo(rightLim,cy);c.stroke();
+  for(let x=24;x<=rightLim;x+=44){c.beginPath();c.moveTo(x,cy-56);c.lineTo(x,cy+56);c.stroke();}
+ }
+ const midX=w/2,pxPerPs=2.9,shiftPx=STATE.offsetPs*pxPerPs,snapHalfPx=5*pxPerPs;
+ // Time-axis picosecond ruler ticks along y=204
+ c.fillStyle='#6894a8';c.font='10px sans-serif';c.textAlign='center';
+ for(const psTick of [-60,-40,-20,0,20,40,60]){
+  const tx=midX+psTick*pxPerPs;
+  c.fillText(`${psTick>0?'+':''}${psTick}ps`,tx,214);
+ }
+ // Magnetic Snap Capture Window around midX on Lane 1
+ c.fillStyle=locked?'rgba(110,231,224,0.18)':'rgba(255,210,125,0.12)';
+ c.fillRect(midX-snapHalfPx,74,snapHalfPx*2,128);
+ c.strokeStyle=locked?'#6ee7e0':'rgba(255,210,125,0.72)';c.lineWidth=1.5;c.setLineDash([4,3]);
+ c.beginPath();c.moveTo(midX,68);c.lineTo(midX,202);c.stroke();c.setLineDash([]);
+ c.textAlign='left';c.font='bold 16.5px sans-serif';c.fillStyle='#a8e6f0';
+ c.fillText('VLBI 상관기 파형 정합 모니터 (손가락·마우스로 좌우 드래그)',24,28);
+ c.font='12.5px sans-serif';c.fillStyle='#90b6c8';
+ c.fillText(`관측 주파수 ${STATE.freq} GHz (주기 ${(1000/STATE.freq).toFixed(1)} ps) · 중앙 자석 구간(±5 ps) 안에 들어오면 0 ps로 자동 결합됩니다`,24,48);
+ // Lane 1: Gaussian Envelope dashed guide + Carrier Wave Packets for Station A & Station B
  for(const [color,pShift,isB] of [['#6be2e3',0,false],['#fac77c',shiftPx,true]]){
-  c.beginPath();c.strokeStyle=isB&&locked?'#95f9e3':color;c.lineWidth=isB?3.4:2.8;
+  // Subtle envelope curve
+  c.save();c.strokeStyle=color;c.globalAlpha=0.32;c.lineWidth=1.2;c.setLineDash([3,3]);c.beginPath();
+  for(let x=25;x<w-23;x+=3){
+   const dx=x-midX-pShift,env=0.32+0.68*Math.exp(-0.5*Math.pow(dx/76,2));
+   const y=140-52*env;if(x===25)c.moveTo(x,y);else c.lineTo(x,y);
+  }
+  c.stroke();c.restore();
+  // Carrier wave with phosphor glow
+  c.save();c.strokeStyle=isB&&locked?'#98fff0':color;c.lineWidth=isB?3.4:2.7;
+  c.shadowColor=color;c.shadowBlur=locked?8:4;c.beginPath();
   for(let x=25;x<w-23;x++){
    const dx=x-midX-pShift;
-   const env=0.35+0.65*Math.exp(-0.5*Math.pow(dx/78,2));
-   const y=137-50*env*Math.cos(dx*0.115);
+   const env=0.32+0.68*Math.exp(-0.5*Math.pow(dx/76,2));
+   const y=140-52*env*Math.cos(dx*0.12);
+   if(x===25)c.moveTo(x,y);else c.lineTo(x,y);
+  }
+  c.stroke();c.restore();
+ }
+ // Draggable Knob Handle on Station B Peak vs Reference A Peak
+ const peakAX=midX,peakAY=140-52;
+ const peakBX=Math.max(42,Math.min(w-42,midX+shiftPx)),peakBY=140-52;
+ c.fillStyle='#6be2e3';c.beginPath();c.arc(peakAX,peakAY,5.5,0,TAU);c.fill();
+ c.fillStyle=locked?'#7ae7b8':'#fac77c';c.strokeStyle='#061826';c.lineWidth=2.2;
+ c.beginPath();c.arc(peakBX,peakBY,8.5,0,TAU);c.fill();c.stroke();
+ // Handle grip pill above peakB
+ const pillW=locked?154:188,pillX=Math.max(110,Math.min(w-110,peakBX));
+ c.fillStyle='rgba(6,20,34,0.92)';c.strokeStyle=locked?'#7ae7b8':'#ffd27d';c.lineWidth=1.3;
+ c.beginPath();c.roundRect?.(pillX-pillW/2,peakBY-30,pillW,20,10);if(!c.roundRect)c.rect(pillX-pillW/2,peakBY-30,pillW,20);c.fill();c.stroke();
+ c.font='bold 11.5px sans-serif';c.textAlign='center';c.fillStyle=locked?'#8affdf':'#ffe094';
+ c.fillText(locked?'🧲 0 ps 정밀 동기화 완료!':`⇄ ${siteName()} 파형 밀기 (${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps)`,pillX,peakBY-16);
+ c.textAlign='left';c.font='12.5px sans-serif';c.fillStyle='#79e7e6';c.fillText('● 기준 관측소 A',26,78);c.fillStyle='#fac77c';c.fillText(`● ${siteName()} 기록 B (드래그 조작)`,142,78);
+ // Lane 2: Clock Phase Drift over Integration Time + Complex Visibility Phasor Dial on Right
+ const lane2Right=w-128;
+ for(const [color,drift] of [['#6be2e3',false],['#f49b98',true]]){
+  c.beginPath();c.lineWidth=2.8;c.strokeStyle=color;
+  for(let x=25;x<lane2Right;x++){
+   const t=(x-25)/(lane2Right-25)-.5;
+   const a=(x-25)*.098+(drift?driftPhase*t:0);
+   const y=298-40*Math.sin(a);
    if(x===25)c.moveTo(x,y);else c.lineTo(x,y);
   }
   c.stroke();
  }
- // Draw peak handles on Reference A (midX) and Station B (midX + shiftPx)
- const peakAX=midX,peakAY=137-50;
- const peakBX=Math.max(36,Math.min(w-36,midX+shiftPx)),peakBY=137-50;
- c.fillStyle='#6be2e3';c.beginPath();c.arc(peakAX,peakAY,5.5,0,TAU);c.fill();
- c.fillStyle=locked?'#7ae7b8':'#fac77c';c.strokeStyle='#071a29';c.lineWidth=2;
- c.beginPath();c.arc(peakBX,peakBY,7.5,0,TAU);c.fill();c.stroke();
- // Pill label above Station B peak
- c.font='bold 12px sans-serif';c.textAlign='center';
- c.fillStyle=locked?'#7ae7b8':'#ffd27d';
- c.fillText(locked?'🧲 0 ps 정확히 일치!':`⇄ ${siteName()} 파형 밀기 (${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps)`,peakBX,peakBY-12);
- c.textAlign='left';c.font='13px sans-serif';c.fillStyle='#79e7e6';c.fillText('기준 A 봉우리',27,82);c.fillStyle='#fac77c';c.fillText(`${siteName()} 기록 B · 드래그하여 시간축 이동`,128,82);
- // Second lane: reference and changing clock phase over an integration.
- for(const [color,drift] of [['#6be2e3',false],['#f49b98',true]]){
-  c.beginPath();c.lineWidth=3;c.strokeStyle=color;
-  for(let x=25;x<w-23;x++){
-   const t=(x-25)/(w-48)-.5;
-   const a=(x-25)*.095+(drift?driftPhase*t:0);
-   const y=300-43*Math.sin(a);
-   if(x===25)c.moveTo(x,y);else c.lineTo(x,y);
-  }c.stroke();}
- c.fillStyle='#dfb2ae';c.fillText('시간이 지날수록 어긋나는 시계 · 위상 드리프트 (수소메이저 안정성 비교)',27,231);
- c.fillStyle='#345367';c.fillRect(25,354,w-50,15);c.fillStyle=coherence>.7?'#6bdfc6':coherence>.3?'#f7ca85':'#f29e9e';c.fillRect(25,354,(w-50)*coherence,15);
- c.font='12px sans-serif';c.fillStyle='#d0e9ea';c.fillText(`합성 신호 크기(선형 드리프트 근사) ${Math.round(coherence*100)}% · 고정 시간 오차 ${STATE.offsetPs} ps`,25,390);
+ c.fillStyle='#dfb2ae';c.font='12.5px sans-serif';c.fillText('적분 시간 동안의 수소메이저 시계 안정도 비교 (위상 드리프트)',26,234);
+ // Complex Phasor Dial on right side of Lane 2 (cx=w-66, cy=298, r=42)
+ const pcx=w-66,pcy=298,pr=40;
+ c.fillStyle='#04111d';c.strokeStyle='#295268';c.lineWidth=1.3;
+ c.beginPath();c.arc(pcx,pcy,pr,0,TAU);c.fill();c.stroke();
+ c.strokeStyle='#19384a';c.beginPath();c.moveTo(pcx-pr,pcy);c.lineTo(pcx+pr,pcy);c.moveTo(pcx,pcy-pr);c.lineTo(pcx,pcy+pr);c.stroke();
+ // Individual integration sample phasors
+ for(let s=-3;s<=3;s++){
+  const ang=-phase+driftPhase*(s/7);
+  c.strokeStyle='rgba(250,199,124,0.35)';c.lineWidth=1.2;
+  c.beginPath();c.moveTo(pcx,pcy);c.lineTo(pcx+Math.cos(ang)*pr*0.88,pcy+Math.sin(ang)*pr*0.88);c.stroke();
+ }
+ // Vector average coherence phasor
+ const vecLen=pr*0.9*coherence,vecAng=-phase;
+ c.strokeStyle=locked&&coherence>.8?'#7ae7b8':'#6be2e3';c.lineWidth=2.8;
+ c.beginPath();c.moveTo(pcx,pcy);c.lineTo(pcx+Math.cos(vecAng)*vecLen,pcy+Math.sin(vecAng)*vecLen);c.stroke();
+ c.fillStyle='#a8dce8';c.font='bold 10.5px sans-serif';c.textAlign='center';c.fillText('복소 위상자',pcx,pcy-pr-7);
+ // Bottom coherence meter bar
+ c.textAlign='left';c.fillStyle='#244254';c.fillRect(25,356,w-50,12);
+ c.fillStyle=coherence>.7?'#6bdfc6':coherence>.3?'#f7ca85':'#f29e9e';c.fillRect(25,356,(w-50)*coherence,12);
+ c.font='12px sans-serif';c.fillStyle='#d0e9ea';c.fillText(`상관 적분 신호 유지율 ${Math.round(coherence*100)}% · 잔여 시간차 ${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps (${Math.round(clockPhaseDegrees(STATE.offsetPs))}°)`,25,383);
  $('#delayValue').textContent=`${STATE.offsetPs>0?'+':''}${STATE.offsetPs} ps${locked?' (🧲 자석 일치)':''}`;
  $('#driftValue').textContent=`${STATE.driftPs} ps`;
  $('#phaseValue').textContent=`${Math.round(clockPhaseDegrees(STATE.offsetPs))}°`;
@@ -1649,56 +1815,159 @@ const LESSONS={
  array:{question:'제주 탐라를 끄면 관측 정보는 어떻게 바뀔까요?',prompt:'지금 4대가 연결돼 있어요. ‘탐라 빼기’를 눌러 비교하세요.',action:'탐라 빼기',after:'4대면 6기선, 3대면 3기선이에요. 관측 방향과 UV 정보도 바뀝니다.'},
  image:{question:'밝은 점 주변의 번짐이 줄었나요?',prompt:'‘CLEAN 10회’를 눌러 보정 전과 후를 비교해 보세요.',action:'CLEAN 10회 실행',after:'CLEAN을 반복해 가짜 번짐 일부를 줄였어요. 이제 광학 영상과 전파 영상을 겹쳐 보세요.'}
 };
-function updateDishInteractive(){
+function updateDishInteractive(time=performance.now()){
  const focusMm=STATE.dishFocusMm,angleDeg=STATE.dishAngleDeg;
  const focusRange=$('#dishFocusRange'),angleRange=$('#dishAngleRange'),badge=$('#dishEffBadge');
+ const focusValEl=$('#dishFocusVal'),angleValEl=$('#dishAngleVal');
  if(focusRange)focusRange.value=String(focusMm);
  if(angleRange)angleRange.value=String(angleDeg);
- const locked=focusMm===0;
- const recY=95-focusMm*1.55,recX=380+angleDeg*2.8;
- const recBox=$('#dishReceiverBox'),recStrut=$('#dishReceiverStrut'),recLabel=$('#dishReceiverLabel'),focusTarget=$('#dishFocusTarget');
- if(recBox){
-  recBox.setAttribute('y',String(recY-27));
-  recBox.setAttribute('stroke',locked&&Math.abs(angleDeg)<=1?'#6ee7e0':'#ffd27d');
+ const lockedFocus=focusMm===0,lockedAngle=Math.abs(angleDeg)<0.05,locked=lockedFocus&&lockedAngle;
+ if(focusValEl){
+  focusValEl.textContent=lockedFocus?'0 mm (🧲 정초점)':`${focusMm>0?'+':''}${focusMm} mm (초점 이탈)`;
+  focusValEl.style.color=lockedFocus?'#7ae7b8':'#ffd27d';
  }
- if(recStrut){
-  recStrut.setAttribute('d',`M380 250 V${(recY-3).toFixed(1)} M282 225 L380 ${(recY+3).toFixed(1)} L478 225`);
+ if(angleValEl){
+  angleValEl.textContent=lockedAngle?'0.0° (🧲 정면 지향)':`${angleDeg>0?'+':''}${angleDeg.toFixed(1)}° (지향 오차)`;
+  angleValEl.style.color=lockedAngle?'#7ae7b8':'#ffd27d';
+ }
+ // Exact parabola geometry: vertex (235, 256), 4*f = 544.68 => f = 136.17, true focal point (235, 120)
+ const x0=235,yv=256,fourF=544.68,fLen=136.17,focusY0=120;
+ // Receiver feed horn aperture position: y moves with focusMm
+ const apY=focusY0-focusMm*1.25,apX=x0;
+ const recBox=$('#dishReceiverBox'),feedHorn=$('#dishFeedHorn'),apLine=$('#dishApertureLine');
+ const dragPill=$('#dishDragPill'),recLabel=$('#dishReceiverLabel'),recStrut=$('#dishReceiverStrut');
+ const focusTarget=$('#dishFocusTarget'),focusGlow=$('#dishFocusGlow');
+ if(recBox){
+  recBox.setAttribute('x',String(apX-20));
+  recBox.setAttribute('y',String((apY-38).toFixed(1)));
+  recBox.setAttribute('stroke',locked?'#7ae7b8':'#ffd27d');
+ }
+ if(feedHorn){
+  feedHorn.setAttribute('d',`M${apX-12} ${(apY-14).toFixed(1)} L${apX-19} ${apY.toFixed(1)} H${apX+19} L${apX+12} ${(apY-14).toFixed(1)} Z`);
+ }
+ if(apLine){
+  apLine.setAttribute('x1',String(apX-21));apLine.setAttribute('x2',String(apX+21));
+  apLine.setAttribute('y1',apY.toFixed(1));apLine.setAttribute('y2',apY.toFixed(1));
+  apLine.setAttribute('stroke',locked?'#98fff0':'#ffd27d');
+ }
+ if(dragPill){
+  dragPill.setAttribute('y',String((apY-34).toFixed(1)));
+  dragPill.setAttribute('stroke',locked?'#6ee7e0':'#ffd27d');
  }
  if(recLabel){
-  recLabel.setAttribute('y',String(recY-36));
-  recLabel.textContent=locked?`수신기 · 초점 일치 (0 mm 🧲)`:`수신기 · 위치 ${focusMm>0?'+':''}${focusMm} mm (드래그/슬라이더 조절)`;
+  recLabel.setAttribute('y',String((apY-18).toFixed(1)));
+  recLabel.textContent=locked?'🧲 정초점 일치 (0 mm · 동위상)':`↕ 위치 ${focusMm>0?'+':''}${focusMm} mm (드래그 조절)`;
+  recLabel.setAttribute('fill',locked?'#98fff0':'#ffe094');
  }
- if(focusTarget){
-  focusTarget.setAttribute('cx',String(recX));
-  focusTarget.setAttribute('cy','95');
+ if(recStrut){
+  // Quadripod legs anchored on the parabola at x = 115, 175, 295, 355 (strictly fill="none")
+  const topY=(apY-16).toFixed(1);
+  recStrut.setAttribute('d',`M115 230 L${apX-15} ${topY} M355 230 L${apX+15} ${topY} M175 249 L${apX-8} ${topY} M295 249 L${apX+8} ${topY}`);
  }
- const inGroup=$('#dishIncomingRays'),refGroup=$('#dishReflectedRays'),waveGroup=$('#dishWaveFronts');
- const dishPts=[[135,163],[215,193],[295,212],[465,212],[545,193],[625,163]];
- const dxIn=Math.sin(angleDeg*DEG)*135;
- if(inGroup){
-  inGroup.replaceChildren();
-  for(const [bx,by] of dishPts){
-   inGroup.append(svgEl('path',{d:`M${(bx-dxIn).toFixed(1)} 22 L${bx} ${by}`,stroke:'#58d7d1','stroke-width':'2.2','stroke-dasharray':'5 5'}));
-  }
- }
- if(refGroup){
-  refGroup.replaceChildren();
-  for(const [bx,by] of dishPts){
-   const hitX=recX+(bx-380)*(focusMm/38),hitY=recY;
-   refGroup.append(svgEl('path',{d:`M${bx} ${by} L${hitX.toFixed(1)} ${hitY.toFixed(1)}`,stroke:locked&&Math.abs(angleDeg)<=1?'#ffd58a':'#f49b98','stroke-width':'2.4'}));
-  }
- }
+ // True focal point shifts laterally with incident angle coma: focalX = x0 - fLen * tan(theta)
+ const th=angleDeg*DEG,sinT=Math.sin(th),cosT=Math.cos(th);
+ const trueFocalX=x0-fLen*Math.tan(th)*0.88,trueFocalY=focusY0;
+ if(focusTarget){focusTarget.setAttribute('cx',trueFocalX.toFixed(1));focusTarget.setAttribute('cy',String(trueFocalY));}
+ if(focusGlow){focusGlow.setAttribute('cx',trueFocalX.toFixed(1));focusGlow.setAttribute('cy',String(trueFocalY));}
+ // Exact Specular Ray Tracing across 8 points on the 21m parabolic reflector
+ const sampleXs=[88,124,160,196,274,310,346,382];
+ const inGroup=$('#dishIncomingRays'),refGroup=$('#dishReflectedRays'),waveGroup=$('#dishWaveFronts'),convGroup=$('#dishConvergingWaves');
+ if(inGroup)inGroup.replaceChildren();
+ if(refGroup)refGroup.replaceChildren();
+ if(waveGroup)waveGroup.replaceChildren();
+ if(convGroup)convGroup.replaceChildren();
+ const phaseAnim=((time*0.045)%28);
+ // Animated incoming planar wavefronts perpendicular to incident direction (sinT, cosT)
  if(waveGroup){
-  waveGroup.replaceChildren();
-  const tilt=angleDeg*1.4;
-  for(const y0 of [36,62]){
-   waveGroup.append(svgEl('path',{d:`M110 ${(y0-tilt).toFixed(1)} Q380 ${y0} 650 ${(y0+tilt).toFixed(1)}`,fill:'none',stroke:'rgba(118,236,229,0.28)','stroke-width':'2'}));
+  for(let wIdx=0;wIdx<4;wIdx++){
+   const d0=32+wIdx*38+phaseAnim;
+   const cxW=x0+sinT*(d0-95),cyW=d0;
+   const halfSpan=152,wx1=cxW-cosT*halfSpan,wy1=cyW+sinT*halfSpan,wx2=cxW+cosT*halfSpan,wy2=cyW-sinT*halfSpan;
+   if(Math.max(wy1,wy2)<205){
+    waveGroup.append(svgEl('line',{x1:wx1.toFixed(1),y1:wy1.toFixed(1),x2:wx2.toFixed(1),y2:wy2.toFixed(1),stroke:'rgba(110,235,235,0.34)','stroke-width':'2','stroke-dasharray':'8 4'}));
+   }
   }
  }
- const eff=Math.round(100*Math.exp(-Math.pow(focusMm/11,2)-Math.pow(angleDeg/6.5,2)));
+ // Trace each ray from sky -> parabolic dish (bx, by) -> specular reflection -> receiver plane y = apY
+ for(const bx of sampleXs){
+  const dx=bx-x0,by=yv-(dx*dx)/fourF;
+  // Incoming ray from top (y = 28)
+  const travelIn=(by-28)/Math.max(0.2,cosT);
+  const startX=bx-sinT*travelIn,startY=28;
+  if(inGroup){
+   inGroup.append(svgEl('line',{x1:startX.toFixed(1),y1:startY.toFixed(1),x2:bx.toFixed(1),y2:by.toFixed(1),stroke:'#4ec9db','stroke-width':'1.7','stroke-opacity':'0.55','stroke-dasharray':'4 5'}));
+  }
+  // Surface normal at (bx, by): dy/dx = -2*dx/fourF => normal vector (-2*dx/fourF, -1) normalized
+  const slope=-2*dx/fourF;
+  const nLen=Math.hypot(slope,1);
+  const nx=-slope/nLen,ny=-1/nLen; // pointing upward toward focal point
+  // Incident unit vector k_in = (-sinT, cosT)
+  const kx=-sinT,ky=cosT;
+  const dotKN=kx*nx+ky*ny;
+  const rx=kx-2*dotKN*nx,ry=ky-2*dotKN*ny; // reflected unit vector
+  // Intersect reflected ray with receiver aperture plane y = apY (and extend slightly if out of focus)
+  const tHit=(apY-by)/Math.min(-0.15,ry);
+  const hitX=bx+rx*tHit,hitY=apY;
+  if(refGroup){
+   const rayColor=locked?'#7cf7e8':Math.abs(focusMm)<=10&&Math.abs(angleDeg)<=2?'#ffd27d':'#f49b98';
+   refGroup.append(svgEl('line',{x1:bx.toFixed(1),y1:by.toFixed(1),x2:hitX.toFixed(1),y2:hitY.toFixed(1),stroke:rayColor,'stroke-width':locked?'2.3':'1.9','stroke-opacity':locked?'0.92':'0.78'}));
+   // Animated photon pulse along the reflected ray
+   const pulseFrac=((time*0.0014+(Math.abs(dx)/300))%1);
+   const px=bx+(hitX-bx)*pulseFrac,py=by+(hitY-by)*pulseFrac;
+   refGroup.append(svgEl('circle',{cx:px.toFixed(1),cy:py.toFixed(1),r:'2.4',fill:locked?'#ffffff':'#ffe082',opacity:'0.88'}));
+  }
+ }
+ // Animated converging spherical wavefront arcs around true focal point
+ if(convGroup){
+  for(let cIdx=0;cIdx<3;cIdx++){
+   const rad=92-((cIdx*30+phaseAnim*1.1)%90);
+   if(rad>10){
+    const xL=trueFocalX-rad*0.78,xR=trueFocalX+rad*0.78,yArc=trueFocalY+rad*0.62;
+    convGroup.append(svgEl('path',{d:`M${xL.toFixed(1)} ${yArc.toFixed(1)} Q${trueFocalX.toFixed(1)} ${(trueFocalY+rad*1.08).toFixed(1)} ${xR.toFixed(1)} ${yArc.toFixed(1)}`,fill:'none',stroke:locked?'rgba(130,255,238,0.42)':'rgba(255,210,125,0.32)','stroke-width':'1.8'}));
+   }
+  }
+ }
+ // Compute realistic Ruze / Strehl aperture efficiency & dBi gain (KVN 21m max gain ~77.2 dBi at 43 GHz)
+ const lambdaMm=C/(STATE.freq*1e9)*1000;
+ const rmsPhaseRad=Math.hypot(focusMm/(lambdaMm*1.85),angleDeg/1.65);
+ const strehl=Math.exp(-Math.pow(focusMm/16,2)-Math.pow(angleDeg/2.8,2));
+ const eff=Math.max(2,Math.round(100*strehl));
+ const maxDbi=77.2+20*Math.log10(STATE.freq/43);
+ const lossDb=Math.min(28,-10*Math.log10(Math.max(0.002,strehl)));
+ const curDbi=(maxDbi-lossDb).toFixed(1);
  if(badge){
-  badge.textContent=locked&&Math.abs(angleDeg)<=1?`🧲 초점 자석 결합 완료! 집광 효율 ${eff}%`:`초점 오차 ${focusMm>0?'+':''}${focusMm} mm · 입사각 ${angleDeg>0?'+':''}${angleDeg}° · 집광 효율 ${eff}%`;
-  badge.style.color=eff>=90?'#7ae7b8':eff>=55?'#ffd27d':'#f29e9e';
+  badge.textContent=locked?`🧲 정초점 자석 결합 완료! 집광 효율 ${eff}% (${curDbi} dBi)`:`초점 ${focusMm>0?'+':''}${focusMm}mm · 입사각 ${angleDeg>0?'+':''}${angleDeg.toFixed(1)}° · 집광 효율 ${eff}%`;
+  badge.style.color=eff>=88?'#7ae7b8':eff>=50?'#ffd27d':'#f29e9e';
+ }
+ // Update Right-Side HUD: Focal Plane Airy Pattern & Live Spectrum
+ const airySpot=$('#dishAirySpot'),airyRing=$('#dishAiryRing'),airyCore=$('#dishAiryCore'),focalStatus=$('#dishFocalStatus');
+ const specPath=$('#dishSpectrumPath'),gainText=$('#dishGainText'),rmsText=$('#dishRmsText'),strehlBar=$('#dishStrehlBar');
+ const spotX=97-angleDeg*5.2,spotY=95;
+ const spotRadius=9+Math.abs(focusMm)*0.52;
+ if(airySpot){airySpot.setAttribute('cx',spotX.toFixed(1));airySpot.setAttribute('cy',String(spotY));airySpot.setAttribute('r',spotRadius.toFixed(1));}
+ if(airyRing){airyRing.setAttribute('cx',spotX.toFixed(1));airyRing.setAttribute('cy',String(spotY));airyRing.setAttribute('r',(spotRadius*1.65).toFixed(1));airyRing.setAttribute('stroke',locked?'#6ee7e0':'#ffd27d');}
+ if(airyCore){airyCore.setAttribute('cx',spotX.toFixed(1));airyCore.setAttribute('cy',String(spotY));airyCore.setAttribute('r',(Math.max(1.5,4.2*strehl)).toFixed(1));airyCore.setAttribute('opacity',String(0.3+0.7*strehl));}
+ if(focalStatus){
+  focalStatus.textContent=locked?`정초점 동위상 수렴 · 위상 오차 0.0 rad`:`위상 오차 ${rmsPhaseRad.toFixed(1)} rad · 초점 흐려짐`;
+  focalStatus.setAttribute('fill',locked?'#89ebd8':'#ffd27d');
+ }
+ if(specPath){
+  let dStr='M 20 268';
+  for(let sx=20;sx<=174;sx+=3){
+   const u=(sx-97)/18;
+   const sig=62*strehl*Math.exp(-0.5*u*u)+3.5*(0.5+0.5*Math.sin(sx*0.7+time*0.012));
+   const sy=268-Math.min(72,sig);
+   dStr+=` L ${sx} ${sy.toFixed(1)}`;
+  }
+  dStr+=' L 174 268 Z';
+  specPath.setAttribute('d',dStr);
+  specPath.setAttribute('stroke',eff>=88?'#6ce3dd':eff>=50?'#ffd27d':'#f29e9e');
+ }
+ if(gainText)gainText.textContent=`안테나 이득: ${curDbi} dBi (집광 효율 ${eff}%)`;
+ if(rmsText)rmsText.textContent=`경로차 손실: -${lossDb.toFixed(1)} dB · 파장 ${lambdaMm.toFixed(1)}mm 기준`;
+ if(strehlBar){
+  strehlBar.setAttribute('width',String(Math.max(6,Math.round(166*strehl))));
+  strehlBar.setAttribute('fill',eff>=88?'#6ee7e0':eff>=50?'#ffd27d':'#f29e9e');
  }
 }
 function setAudience(){
@@ -1783,14 +2052,15 @@ function initializeEvents(){
  $$('[data-freq]').forEach(b=>b.addEventListener('click',()=>{STATE.freq=+b.dataset.freq;saveStateUpdate();}));
  $('#timeRange').addEventListener('input',e=>{STATE.hours=+e.target.value;saveStateUpdate();});
  $('#phaseToggle').addEventListener('change',e=>{STATE.phase=e.target.checked;saveStateUpdate();});
- // Interactive Dish Focus & Angle (Tab 01)
+ // Interactive Dish Focus & Angle (Tab 01) with Magnetic Snap
  $('#dishFocusRange')?.addEventListener('input',e=>{
   const v=+e.target.value;
   STATE.dishFocusMm=Math.abs(v)<=4?0:Math.round(v);
   updateDishInteractive();
  });
  $('#dishAngleRange')?.addEventListener('input',e=>{
-  STATE.dishAngleDeg=+e.target.value;
+  const v=+e.target.value;
+  STATE.dishAngleDeg=Math.abs(v)<=0.5?0:v;
   updateDishInteractive();
  });
  const dishSvg=$('#dishSvg');
@@ -1799,9 +2069,9 @@ function initializeEvents(){
   const moveDish=e=>{
    if(!dishDrag)return;
    const rect=dishSvg.getBoundingClientRect();
-   const svgY=(e.clientY-rect.top)/Math.max(1,rect.height)*300;
-   const rawMm=(95-svgY)/1.55;
-   const clamped=Math.max(-25,Math.min(25,rawMm));
+   const svgY=(e.clientY-rect.top)/Math.max(1,rect.height)*390;
+   const rawMm=(120-svgY)/1.25;
+   const clamped=Math.max(-45,Math.min(45,rawMm));
    STATE.dishFocusMm=Math.abs(clamped)<=4?0:Math.round(clamped);
    updateDishInteractive();
   };
@@ -1893,7 +2163,14 @@ function initializeEvents(){
  $('#modal').addEventListener('click',e=>{if(e.target.dataset.close==='true')closeModal();});document.addEventListener('keydown',e=>{if($('#modal').hidden)return;if(e.key==='Escape'){closeModal();return;}if(e.key==='Tab'){const nodes=Array.from($('#modal').querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),[tabindex="0"]')).filter(el=>!el.hidden&&el.getClientRects().length);if(!nodes.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
  $('#photoUpload').addEventListener('change',e=>{const file=e.target.files?.[0];if(!file)return;const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{const cuts=[[.026,0,.437,.324],[.526,0,.437,.364],[.026,.521,.437,.363],[.526,.521,.437,.363]];for(let i=0;i<4;i++){const [x,y,w,h]=cuts[i],cc=document.createElement('canvas');cc.width=470;cc.height=330;cc.getContext('2d').drawImage(img,img.width*x,img.height*y,img.width*w,img.height*h,0,0,470,330);$(`[data-station="${SITES[i].id}"] img`).src=cc.toDataURL('image/jpeg',.86);}openModal('사진 적용 완료',`<p class="modal-note">4분할 사진을 현재 천문대 카드에 적용했습니다. 이미지의 테두리와 글씨가 일부 남으면 원본 2×2 배열 비율이 다를 수 있습니다. 파일을 다시 열면 새 사진으로 교체됩니다.</p>`);};img.src=rd.result;};rd.readAsDataURL(file);e.target.value='';});
  }
-function loop(time){if(!document.hidden&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&time-lastActiveTime>33){drawWaves(time);lastActiveTime=time;}visualFrame=requestAnimationFrame(loop);}
+function loop(time){
+ if(!document.hidden&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&time-lastActiveTime>33){
+  drawWaves(time);
+  if(STATE.mode==='collect')updateDishInteractive(time);
+  lastActiveTime=time;
+ }
+ visualFrame=requestAnimationFrame(loop);
+}
 function init(){initializeEvents();setAudience('expert');renderControls();drawMap();updateDishInteractive();visualFrame=requestAnimationFrame(loop);window.__KVN_TEST__={state:STATE,science:()=>science,selectStage,setAudience,lessonAction,applySyncOffset,fft1d,ifft2d,makeUV,makeScience,cleanOne,sourceVisibility,clockCycles,clockCoherence,openReal};}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
