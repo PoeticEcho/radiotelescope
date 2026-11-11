@@ -2,7 +2,9 @@
 
 연세·울산·탐라·평창 네 곳의 **한국우주전파관측망(KVN, Korean VLBI Network)** 전파망원경 신호를 합성하여 **게성운(Crab Nebula)**과 **M87 은하의 제트(M87 Jet)** 영상을 복원하는 대화형 전파천문 가상 실험실입니다.
 
-별도의 외부 라이브러리나 서버 설치 없이 단일 HTML 파일([`radio_telescope.html`](./radio_telescope.html))만으로 브라우저에서 2차원 푸리에 변환(FFT/IFFT), UV 평면 샘플링, 시계 동기화 및 CLEAN 영상 복원 과정을 직접 체험할 수 있습니다.
+별도의 외부 라이브러리나 서버 설치 없이 단일 HTML 파일([`radio_telescope.html`](./radio_telescope.html) / [`index.html`](./index.html))만으로 브라우저에서 2차원 푸리에 변환(FFT/IFFT), UV 평면 샘플링, 시계 동기화 및 CLEAN 영상 복원 과정을 직접 체험할 수 있습니다.
+
+- **바로 체험하기 (GitHub Pages)**: [https://poeticecho.github.io/radiotelescope/](https://poeticecho.github.io/radiotelescope/)
 
 ![KVN 한반도 전파 실험실 대표 이미지](./og.png)
 
@@ -47,7 +49,7 @@
 
 | 파일명 | 설명 |
 | :--- | :--- |
-| [`radio_telescope.html`](./radio_telescope.html) | 시뮬레이션 엔진(2D FFT/IFFT, UV 그리딩, CLEAN 복원), UI 스타일, 내장 이미지 데이터를 모두 포함한 단일 실행 웹 애플리케이션 |
+| [`index.html`](./index.html) / [`radio_telescope.html`](./radio_telescope.html) | 시뮬레이션 엔진(2D FFT/IFFT, UV 그리딩, CLEAN 복원), UI 스타일, 내장 이미지 데이터를 모두 포함한 단일 실행 웹 애플리케이션 (GitHub Pages 기본 진입점 포함) |
 | [`og.png`](./og.png) | 오픈그래프(Open Graph) 미리보기용 대표 이미지 (`1200×630`) |
 | [`favicon.ico`](./favicon.ico) | 브라우저 탭 아이콘 (Favicon) |
 
